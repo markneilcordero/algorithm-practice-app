@@ -1,0 +1,66 @@
+/* Reset and base styles */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  background-color: #f8f9fa;
+  color: #212529;
+  line-height: 1.6;
+}
+
+/* App should fill the screen */
+html,
+body,
+#root {
+  height: 100%;
+}
+
+/* Make footer stick to the bottom if content is short */
+#root {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Utility styles */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Bootstrap override for active nav links */
+.nav-link.active {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+/* Toast notifications (if you use them) */
+.toast-container {
+  z-index: 1060;
+}
+
+/* Custom buttons or overrides */
+.btn-primary {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+.btn-primary:hover {
+  background-color: #0b5ed7;
+  border-color: #0a58ca;
+}
+
+/* Footer link hover (if you're using footer-link class) */
+.footer-link:hover {
+  color: #0a58ca;
+  text-decoration: underline;
+}

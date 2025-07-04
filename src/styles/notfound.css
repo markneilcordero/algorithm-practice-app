@@ -1,0 +1,22 @@
+/* src/styles/notfound.css */
+
+/* Wrapper to center content vertically */
+.notfound-wrapper {
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Optional enhancements */
+.notfound-wrapper h1 {
+  font-size: 2.5rem;
+  margin-top: 1rem;
+}
+
+.notfound-wrapper p {
+  max-width: 600px;
+  font-size: 1.1rem;
+  color: #6c757d;
+}
