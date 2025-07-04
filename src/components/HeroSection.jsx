@@ -13,7 +13,7 @@ const HeroSection = () => {
           Practice Data Structures and Algorithms in a fun and interactive way.
         </p>
         <img
-          src="public/undraw_problem-solving.png"
+          src="/undraw_problem-solving.png"
           alt="Coding Illustration"
           className="img-fluid mb-4"
           style={{ maxHeight: '300px' }}
