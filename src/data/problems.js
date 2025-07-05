@@ -876,4 +876,148 @@ function canFinish(numCourses, prerequisites) {
 }
 `.trim()
   }
+,
+{
+    id: 'sort-colors',
+    title: 'Sort Colors (Dutch National Flag)',
+    description: 'Given an array with n objects colored red, white, or blue (represented as 0, 1, or 2), sort them in-place so that objects of the same color are adjacent.',
+    difficulty: 'Easy',
+    tags: ['Sorting'],
+    examples: [
+      { input: '[2,0,2,1,1,0]', output: '[0,0,1,1,2,2]' }
+    ],
+    testCases: [
+      { input: [[2,0,2,1,1,0]], expected: [0,0,1,1,2,2] }
+    ],
+    solution: `
+function sortColors(nums) {
+  let low = 0, mid = 0, high = nums.length - 1;
+  while (mid <= high) {
+    if (nums[mid] === 0) [nums[low++], nums[mid++]] = [nums[mid], nums[low]];
+    else if (nums[mid] === 1) mid++;
+    else [nums[mid], nums[high--]] = [nums[high], nums[mid]];
+  }
+  return nums;
+}
+`.trim()
+  },
+  {
+    id: 'group-anagrams',
+    title: 'Group Anagrams',
+    description: 'Given an array of strings, group the anagrams together.',
+    difficulty: 'Medium',
+    tags: ['Hashing', 'Sorting'],
+    examples: [
+      { input: '["eat","tea","tan","ate","nat","bat"]', output: '[["eat","tea","ate"],["tan","nat"],["bat"]]' }
+    ],
+    testCases: [
+      { input: [["eat","tea","tan","ate","nat","bat"]], expected: [["eat","tea","ate"],["tan","nat"],["bat"]] }
+    ],
+    solution: `
+function groupAnagrams(strs) {
+  const map = {};
+  for (const str of strs) {
+    const key = str.split('').sort().join('');
+    if (!map[key]) map[key] = [];
+    map[key].push(str);
+  }
+  return Object.values(map);
+}
+`.trim()
+  },
+  {
+    id: 'longest-substring-without-repeating',
+    title: 'Longest Substring Without Repeating Characters',
+    description: 'Given a string, find the length of the longest substring without repeating characters.',
+    difficulty: 'Medium',
+    tags: ['Sliding Window'],
+    examples: [
+      { input: '"abcabcbb"', output: '3' }
+    ],
+    testCases: [
+      { input: ["abcabcbb"], expected: 3 },
+      { input: ["bbbbb"], expected: 1 },
+      { input: ["pwwkew"], expected: 3 }
+    ],
+    solution: `
+function lengthOfLongestSubstring(s) {
+  let set = new Set(), left = 0, max = 0;
+  for (let right = 0; right < s.length; right++) {
+    while (set.has(s[right])) {
+      set.delete(s[left++]);
+    }
+    set.add(s[right]);
+    max = Math.max(max, right - left + 1);
+  }
+  return max;
+}
+`.trim()
+  },
+  {
+    id: 'word-ladder',
+    title: 'Word Ladder',
+    description: 'Given two words (beginWord and endWord), and a dictionary, find the length of shortest transformation sequence where only one letter can be changed at a time and each transformed word must exist in the dictionary.',
+    difficulty: 'Hard',
+    tags: ['Graph', 'BFS'],
+    examples: [
+      { input: 'beginWord = "hit", endWord = "cog", wordList = ["hot","dot","dog","lot","log","cog"]', output: '5' }
+    ],
+    testCases: [
+      { input: ["hit", "cog", ["hot","dot","dog","lot","log","cog"]], expected: 5 }
+    ],
+    solution: `
+function ladderLength(beginWord, endWord, wordList) {
+  const wordSet = new Set(wordList);
+  if (!wordSet.has(endWord)) return 0;
+  let queue = [[beginWord, 1]];
+  while (queue.length) {
+    const [word, steps] = queue.shift();
+    if (word === endWord) return steps;
+    for (let i = 0; i < word.length; i++) {
+      for (let c = 97; c <= 122; c++) {
+        const next = word.slice(0, i) + String.fromCharCode(c) + word.slice(i + 1);
+        if (wordSet.has(next)) {
+          queue.push([next, steps + 1]);
+          wordSet.delete(next);
+        }
+      }
+    }
+  }
+  return 0;
+}
+`.trim()
+  },
+  {
+    id: 'merge-k-sorted-lists',
+    title: 'Merge K Sorted Lists',
+    description: 'You are given an array of k linked-lists, each linked-list is sorted. Merge all the linked-lists into one sorted list and return it.',
+    difficulty: 'Hard',
+    tags: ['Heap', 'Linked List', 'Sorting'],
+    examples: [
+      { input: '[[1,4,5],[1,3,4],[2,6]]', output: '[1,1,2,3,4,4,5,6]' }
+    ],
+    testCases: [
+      { input: [[[1,4,5],[1,3,4],[2,6]]], expected: [1,1,2,3,4,4,5,6] }
+    ],
+    solution: `
+function mergeKLists(lists) {
+  const nodes = [];
+  for (const list of lists) {
+    let curr = list;
+    while (curr) {
+      nodes.push(curr.val);
+      curr = curr.next;
+    }
+  }
+  nodes.sort((a, b) => a - b);
+  const dummy = { val: -1, next: null };
+  let curr = dummy;
+  for (let val of nodes) {
+    curr.next = { val, next: null };
+    curr = curr.next;
+  }
+  return dummy.next;
+}
+`.trim()
+  }
 ];
