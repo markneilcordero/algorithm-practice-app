@@ -1020,4 +1020,307 @@ function mergeKLists(lists) {
 }
 `.trim()
   }
+,
+{
+    id: 'is-power-of-two',
+    title: 'Is Power of Two',
+    description: 'Given an integer n, return true if it is a power of two. Otherwise, return false.',
+    difficulty: 'Easy',
+    tags: ['Bit Mask', 'Math'],
+    examples: [
+      { input: '1', output: 'true' },
+      { input: '16', output: 'true' },
+      { input: '3', output: 'false' }
+    ],
+    testCases: [
+      { input: [1], expected: true },
+      { input: [16], expected: true },
+      { input: [3], expected: false }
+    ],
+    solution: `
+function isPowerOfTwo(n) {
+  return n > 0 && (n & (n - 1)) === 0;
+}
+`.trim()
+  },
+  {
+    id: 'climbing-stairs',
+    title: 'Climbing Stairs',
+    description: 'You are climbing a staircase. It takes n steps to reach the top. Each time you can climb 1 or 2 steps. How many distinct ways can you climb to the top?',
+    difficulty: 'Medium',
+    tags: ['Dynamic Programming'],
+    examples: [
+      { input: '2', output: '2' },
+      { input: '3', output: '3' }
+    ],
+    testCases: [
+      { input: [2], expected: 2 },
+      { input: [3], expected: 3 }
+    ],
+    solution: `
+function climbStairs(n) {
+  if (n <= 2) return n;
+  let a = 1, b = 2;
+  for (let i = 3; i <= n; i++) {
+    let temp = a + b;
+    a = b;
+    b = temp;
+  }
+  return b;
+}
+`.trim()
+  },
+  {
+    id: 'decode-string',
+    title: 'Decode String',
+    description: 'Given an encoded string, return its decoded version. The encoding rule is: k[encoded_string], where k is a positive integer.',
+    difficulty: 'Medium',
+    tags: ['Stack'],
+    examples: [
+      { input: '"3[a]2[bc]"', output: '"aaabcbc"' },
+      { input: '"3[a2[c]]"', output: '"accaccacc"' }
+    ],
+    testCases: [
+      { input: ["3[a]2[bc]"], expected: "aaabcbc" },
+      { input: ["3[a2[c]]"], expected: "accaccacc" }
+    ],
+    solution: `
+function decodeString(s) {
+  const stack = [];
+  let currStr = '', currNum = 0;
+  for (let ch of s) {
+    if (!isNaN(ch)) {
+      currNum = currNum * 10 + Number(ch);
+    } else if (ch === '[') {
+      stack.push([currStr, currNum]);
+      currStr = '';
+      currNum = 0;
+    } else if (ch === ']') {
+      const [prevStr, num] = stack.pop();
+      currStr = prevStr + currStr.repeat(num);
+    } else {
+      currStr += ch;
+    }
+  }
+  return currStr;
+}
+`.trim()
+  },
+  {
+    id: 'number-of-connected-components',
+    title: 'Number of Connected Components in an Undirected Graph',
+    description: 'Given n nodes and a list of edges, return the number of connected components in the graph.',
+    difficulty: 'Hard',
+    tags: ['Graph', 'Union-Find'],
+    examples: [
+      { input: 'n = 5, edges = [[0,1],[1,2],[3,4]]', output: '2' }
+    ],
+    testCases: [
+      { input: [5, [[0,1],[1,2],[3,4]]], expected: 2 }
+    ],
+    solution: `
+function countComponents(n, edges) {
+  const parent = Array.from({ length: n }, (_, i) => i);
+  function find(x) {
+    if (x !== parent[x]) parent[x] = find(parent[x]);
+    return parent[x];
+  }
+  function union(x, y) {
+    const rootX = find(x), rootY = find(y);
+    if (rootX !== rootY) parent[rootX] = rootY;
+  }
+  for (let [u, v] of edges) union(u, v);
+  const unique = new Set();
+  for (let i = 0; i < n; i++) unique.add(find(i));
+  return unique.size;
+}
+`.trim()
+  },
+  {
+    id: 'palindrome-partitioning',
+    title: 'Palindrome Partitioning',
+    description: 'Given a string s, partition s such that every substring of the partition is a palindrome. Return all possible palindrome partitioning.',
+    difficulty: 'Hard',
+    tags: ['Backtracking'],
+    examples: [
+      { input: '"aab"', output: '[["a","a","b"],["aa","b"]]' }
+    ],
+    testCases: [
+      { input: ["aab"], expected: [["a","a","b"],["aa","b"]] }
+    ],
+    solution: `
+function partition(s) {
+  const res = [];
+  function isPalindrome(str) {
+    return str === str.split('').reverse().join('');
+  }
+  function backtrack(start = 0, path = []) {
+    if (start === s.length) {
+      res.push([...path]);
+      return;
+    }
+    for (let end = start + 1; end <= s.length; end++) {
+      const substr = s.slice(start, end);
+      if (isPalindrome(substr)) {
+        path.push(substr);
+        backtrack(end, path);
+        path.pop();
+      }
+    }
+  }
+  backtrack();
+  return res;
+}
+`.trim()
+  }
+,
+{
+    id: 'can-place-flowers',
+    title: 'Can Place Flowers',
+    description: 'Given a flowerbed (array of 0 and 1), and a number n, return if n new flowers can be planted without violating the no-adjacent-flowers rule.',
+    difficulty: 'Easy',
+    tags: ['Greedy'],
+    examples: [
+      { input: '[1,0,0,0,1], n = 1', output: 'true' },
+      { input: '[1,0,0,0,1], n = 2', output: 'false' }
+    ],
+    testCases: [
+      { input: [[1,0,0,0,1], 1], expected: true },
+      { input: [[1,0,0,0,1], 2], expected: false }
+    ],
+    solution: `
+function canPlaceFlowers(flowerbed, n) {
+  let count = 0;
+  for (let i = 0; i < flowerbed.length && count < n; i++) {
+    if (flowerbed[i] === 0 &&
+        (i === 0 || flowerbed[i - 1] === 0) &&
+        (i === flowerbed.length - 1 || flowerbed[i + 1] === 0)) {
+      flowerbed[i] = 1;
+      count++;
+    }
+  }
+  return count >= n;
+}
+`.trim()
+  },
+  {
+    id: 'min-add-to-make-valid',
+    title: 'Minimum Add to Make Parentheses Valid',
+    description: 'Given a string of parentheses, return the minimum number of parentheses needed to make it valid.',
+    difficulty: 'Medium',
+    tags: ['Stack'],
+    examples: [
+      { input: '"())"', output: '1' },
+      { input: '"((("', output: '3' }
+    ],
+    testCases: [
+      { input: [")("], expected: 2 },
+      { input: ["(()))("], expected: 2 }
+    ],
+    solution: `
+function minAddToMakeValid(s) {
+  let open = 0, close = 0;
+  for (let ch of s) {
+    if (ch === '(') open++;
+    else if (open > 0) open--;
+    else close++;
+  }
+  return open + close;
+}
+`.trim()
+  },
+  {
+    id: 'diameter-of-binary-tree',
+   title: 'Diameter of Binary Tree',
+   description: 'Given a binary tree, return the length of the longest path between any two nodes.',
+   difficulty: 'Medium',
+   tags: ['Tree'],
+   examples: [
+      { input: 'root = [1,2,3,4,5]', output: '3' }
+    ],
+   testCases: [
+      { input: [{ val: 1, left: { val: 2, left: { val: 4 }, right: { val: 5 } }, right: { val: 3 } }], expected: 3 }
+    ],
+    solution: `
+function diameterOfBinaryTree(root) {
+  let max = 0;
+  function depth(node) {
+    if (!node) return 0;
+    const left = depth(node.left);
+    const right = depth(node.right);
+    max = Math.max(max, left + right);
+    return 1 + Math.max(left, right);
+  }
+  depth(root);
+  return max;
+}
+`.trim()
+  },
+  {
+    id: 'unique-paths',
+    title: 'Unique Paths in Grid',
+    description: 'A robot is located at the top-left corner of an m x n grid. The robot can only move either down or right. How many possible unique paths are there to reach the bottom-right corner?',
+    difficulty: 'Hard',
+    tags: ['Dynamic Programming'],
+    examples: [
+      { input: 'm = 3, n = 7', output: '28' }
+    ],
+    testCases: [
+      { input: [3, 7], expected: 28 },
+      { input: [3, 2], expected: 3 }
+    ],
+    solution: `
+function uniquePaths(m, n) {
+  const dp = Array(m).fill().map(() => Array(n).fill(1));
+  for (let i = 1; i < m; i++) {
+    for (let j = 1; j < n; j++) {
+      dp[i][j] = dp[i-1][j] + dp[i][j-1];
+    }
+  }
+  return dp[m-1][n-1];
+}
+`.trim()
+  },
+  {
+    id: 'longest-increasing-path-matrix',
+    title: 'Longest Increasing Path in Matrix',
+    description: 'Given an m x n integers matrix, return the length of the longest increasing path.',
+    difficulty: 'Hard',
+    tags: ['Matrix', 'DFS', 'Dynamic Programming'],
+    examples: [
+      { input: 'matrix = [[9,9,4],[6,6,8],[2,1,1]]', output: '4' }
+    ],
+    testCases: [
+      { input: [[[9,9,4],[6,6,8],[2,1,1]]], expected: 4 },
+      { input: [[[3,4,5],[3,2,6],[2,2,1]]], expected: 4 }
+    ],
+    solution: `
+function longestIncreasingPath(matrix) {
+  const m = matrix.length, n = matrix[0].length;
+  const memo = Array.from({ length: m }, () => Array(n).fill(0));
+  const dirs = [[0,1],[1,0],[0,-1],[-1,0]];
+
+  function dfs(i, j) {
+    if (memo[i][j]) return memo[i][j];
+    let max = 1;
+    for (let [dx, dy] of dirs) {
+      const x = i + dx, y = j + dy;
+      if (x >= 0 && y >= 0 && x < m && y < n && matrix[x][y] > matrix[i][j]) {
+        max = Math.max(max, 1 + dfs(x, y));
+      }
+    }
+    memo[i][j] = max;
+    return max;
+  }
+
+  let result = 0;
+  for (let i = 0; i < m; i++) {
+    for (let j = 0; j < n; j++) {
+      result = Math.max(result, dfs(i, j));
+    }
+  }
+  return result;
+}
+`.trim()
+  }
 ];
