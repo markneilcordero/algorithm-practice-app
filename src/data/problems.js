@@ -722,4 +722,158 @@ function deserialize(data) {
 }
 `.trim()
   }
+,
+{
+    id: 'reverse-linked-list',
+    title: 'Reverse Linked List',
+    description: 'Given the head of a singly linked list, reverse the list and return the new head.',
+    difficulty: 'Easy',
+    tags: ['Linked List'],
+    examples: [
+      { input: '[1,2,3,4,5]', output: '[5,4,3,2,1]' }
+    ],
+    testCases: [
+      { input: [{ val: 1, next: { val: 2, next: { val: 3 } } }], expected: { val: 3, next: { val: 2, next: { val: 1 } } } }
+    ],
+    solution: `
+function reverseList(head) {
+  let prev = null, curr = head;
+  while (curr) {
+    let next = curr.next;
+    curr.next = prev;
+    prev = curr;
+    curr = next;
+  }
+  return prev;
+}
+`.trim()
+  },
+  {
+    id: 'evaluate-reverse-polish-notation',
+    title: 'Evaluate Reverse Polish Notation',
+    description: 'Evaluate the value of an arithmetic expression in Reverse Polish Notation. Supported operators: +, -, *, /',
+    difficulty: 'Medium',
+    tags: ['Stack'],
+    examples: [
+      { input: '["2","1","+","3","*"]', output: '9' }
+    ],
+    testCases: [
+      { input: [["2","1","+","3","*"]], expected: 9 },
+      { input: [["4","13","5","/","+"]], expected: 6 }
+    ],
+    solution: `
+function evalRPN(tokens) {
+  const stack = [];
+  for (const token of tokens) {
+    if (!isNaN(token)) {
+      stack.push(Number(token));
+    } else {
+      const b = stack.pop();
+      const a = stack.pop();
+      switch (token) {
+        case '+': stack.push(a + b); break;
+        case '-': stack.push(a - b); break;
+        case '*': stack.push(a * b); break;
+        case '/': stack.push(Math.trunc(a / b)); break;
+      }
+    }
+  }
+  return stack.pop();
+}
+`.trim()
+  },
+  {
+    id: 'jump-game',
+    title: 'Jump Game',
+    description: 'Given an array of non-negative integers, where each element represents your max jump length, determine if you can reach the last index.',
+    difficulty: 'Medium',
+    tags: ['Greedy'],
+    examples: [
+      { input: '[2,3,1,1,4]', output: 'true' },
+      { input: '[3,2,1,0,4]', output: 'false' }
+    ],
+    testCases: [
+      { input: [[2,3,1,1,4]], expected: true },
+      { input: [[3,2,1,0,4]], expected: false }
+    ],
+    solution: `
+function canJump(nums) {
+  let maxReach = 0;
+  for (let i = 0; i < nums.length; i++) {
+    if (i > maxReach) return false;
+    maxReach = Math.max(maxReach, i + nums[i]);
+  }
+  return true;
+}
+`.trim()
+  },
+  {
+    id: 'generate-parentheses',
+    title: 'Generate Parentheses',
+    description: 'Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.',
+    difficulty: 'Hard',
+    tags: ['Backtracking', 'Recursion'],
+    examples: [
+      { input: 'n = 3', output: '["((()))","(()())","(())()","()(())","()()()"]' }
+    ],
+    testCases: [
+      { input: [3], expected: ["((()))","(()())","(())()","()(())","()()()"] }
+    ],
+    solution: `
+function generateParenthesis(n) {
+  const res = [];
+  function backtrack(curr, open, close) {
+    if (curr.length === 2 * n) {
+      res.push(curr);
+      return;
+    }
+    if (open < n) backtrack(curr + '(', open + 1, close);
+    if (close < open) backtrack(curr + ')', open, close + 1);
+  }
+  backtrack('', 0, 0);
+  return res;
+}
+`.trim()
+  },
+  {
+    id: 'course-schedule',
+    title: 'Course Schedule (Topological Sort)',
+    description: 'There are a total of numCourses courses you have to take, labeled from 0 to numCourses-1. Some courses may have prerequisites. Determine if it is possible to finish all courses.',
+    difficulty: 'Hard',
+    tags: ['Graph', 'Topological Sort'],
+    examples: [
+      { input: 'numCourses = 2, prerequisites = [[1,0]]', output: 'true' }
+    ],
+    testCases: [
+      { input: [2, [[1,0]]], expected: true },
+      { input: [2, [[1,0],[0,1]]], expected: false }
+    ],
+    solution: `
+function canFinish(numCourses, prerequisites) {
+  const inDegree = Array(numCourses).fill(0);
+  const graph = Array.from({ length: numCourses }, () => []);
+  for (const [a, b] of prerequisites) {
+    graph[b].push(a);
+    inDegree[a]++;
+  }
+
+  const queue = [];
+  for (let i = 0; i < numCourses; i++) {
+    if (inDegree[i] === 0) queue.push(i);
+  }
+
+  let taken = 0;
+  while (queue.length) {
+    const course = queue.shift();
+    taken++;
+    for (const next of graph[course]) {
+      inDegree[next]--;
+      if (inDegree[next] === 0) queue.push(next);
+    }
+  }
+
+  return taken === numCourses;
+}
+`.trim()
+  }
 ];
