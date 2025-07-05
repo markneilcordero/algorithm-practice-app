@@ -273,4 +273,146 @@ function numIslands(grid) {
 }
 `.trim()
   }
+,
+{
+    id: 'factorial-recursion',
+    title: 'Factorial using Recursion',
+    description: 'Write a function to compute the factorial of a non-negative integer using recursion.',
+    difficulty: 'Easy',
+    tags: ['Recursion'],
+    examples: [
+      { input: '5', output: '120' },
+      { input: '0', output: '1' }
+    ],
+    testCases: [
+      { input: [5], expected: 120 },
+      { input: [0], expected: 1 }
+    ],
+    solution: `
+function factorial(n) {
+  if (n === 0) return 1;
+  return n * factorial(n - 1);
+}
+`.trim()
+  },
+  {
+    id: 'minimum-meeting-rooms',
+    title: 'Minimum Meeting Rooms',
+    description: 'Given an array of meeting time intervals consisting of start and end times, return the minimum number of conference rooms required.',
+    difficulty: 'Medium',
+    tags: ['Greedy', 'Sorting'],
+    examples: [
+      { input: '[[0,30],[5,10],[15,20]]', output: '2' }
+    ],
+    testCases: [
+      { input: [[[0,30],[5,10],[15,20]]], expected: 2 },
+      { input: [[[7,10],[2,4]]], expected: 1 }
+    ],
+    solution: `
+function minMeetingRooms(intervals) {
+  if (!intervals.length) return 0;
+  const starts = intervals.map(i => i[0]).sort((a, b) => a - b);
+  const ends = intervals.map(i => i[1]).sort((a, b) => a - b);
+  let rooms = 0, end = 0;
+  for (let i = 0; i < intervals.length; i++) {
+    if (starts[i] < ends[end]) {
+      rooms++;
+    } else {
+      end++;
+    }
+  }
+  return rooms;
+}
+`.trim()
+  },
+  {
+    id: 'longest-common-prefix',
+    title: 'Longest Common Prefix',
+    description: 'Write a function to find the longest common prefix string among an array of strings. If there is no common prefix, return an empty string.',
+    difficulty: 'Medium',
+    tags: ['String', 'Trie'],
+    examples: [
+      { input: '["flower","flow","flight"]', output: '"fl"' }
+    ],
+    testCases: [
+      { input: [["flower","flow","flight"]], expected: "fl" },
+      { input: [["dog","racecar","car"]], expected: "" }
+    ],
+    solution: `
+function longestCommonPrefix(strs) {
+  if (!strs.length) return '';
+  let prefix = strs[0];
+  for (let i = 1; i < strs.length; i++) {
+    while (strs[i].indexOf(prefix) !== 0) {
+      prefix = prefix.slice(0, -1);
+      if (!prefix) return '';
+    }
+  }
+  return prefix;
+}
+`.trim()
+  },
+  {
+    id: 'edit-distance',
+    title: 'Edit Distance (Levenshtein)',
+    description: 'Given two strings word1 and word2, return the minimum number of operations required to convert word1 to word2. Allowed operations: insert, delete, replace.',
+    difficulty: 'Hard',
+    tags: ['Dynamic Programming'],
+    examples: [
+      { input: 'word1 = "horse", word2 = "ros"', output: '3' }
+    ],
+    testCases: [
+      { input: ["horse", "ros"], expected: 3 },
+      { input: ["intention", "execution"], expected: 5 }
+    ],
+    solution: `
+function minDistance(word1, word2) {
+  const m = word1.length, n = word2.length;
+  const dp = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
+  for (let i = 0; i <= m; i++) dp[i][0] = i;
+  for (let j = 0; j <= n; j++) dp[0][j] = j;
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      if (word1[i - 1] === word2[j - 1]) {
+        dp[i][j] = dp[i - 1][j - 1];
+      } else {
+        dp[i][j] = 1 + Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]);
+      }
+    }
+  }
+  return dp[m][n];
+}
+`.trim()
+  },
+  {
+    id: 'burst-balloons',
+    title: 'Burst Balloons',
+    description: 'Given n balloons, each with a number on it, return the maximum coins you can collect by bursting them wisely. You burst balloon i to get coins equal to nums[i-1] * nums[i] * nums[i+1].',
+    difficulty: 'Hard',
+    tags: ['Dynamic Programming'],
+    examples: [
+      { input: '[3,1,5,8]', output: '167' }
+    ],
+    testCases: [
+      { input: [[3,1,5,8]], expected: 167 }
+    ],
+    solution: `
+function maxCoins(nums) {
+  const n = nums.length;
+  const newNums = [1, ...nums, 1];
+  const dp = Array.from({ length: n + 2 }, () => Array(n + 2).fill(0));
+  for (let len = 1; len <= n; len++) {
+    for (let left = 1; left <= n - len + 1; left++) {
+      const right = left + len - 1;
+      for (let k = left; k <= right; k++) {
+        dp[left][right] = Math.max(dp[left][right],
+          newNums[left - 1] * newNums[k] * newNums[right + 1] +
+          dp[left][k - 1] + dp[k + 1][right]);
+      }
+    }
+  }
+  return dp[1][n];
+}
+`.trim()
+  }
 ];
