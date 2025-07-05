@@ -21,13 +21,13 @@ const ProblemDetailPage = () => {
   const [problem, setProblem] = useState(null);
   const [code, setCode] = useState('');
   const [testResults, setTestResults] = useState(null);
+  const [showSolution, setShowSolution] = useState(false);
 
   useEffect(() => {
     const found = problems.find(p => p.id === problemId);
     if (!found) return navigate('/practice');
     setProblem(found);
 
-    // Load user's previous code for this problem
     const saved = getUserCode(problemId);
     if (saved) setCode(saved);
   }, [problemId, navigate]);
@@ -80,6 +80,23 @@ const ProblemDetailPage = () => {
             <h5 className="mt-4">🧪 Test Results</h5>
             <TestCaseRunner results={testResults} />
           </>
+        )}
+
+        {problem.solution && (
+          <div className="mt-4">
+            <button
+              className="btn btn-outline-secondary"
+              onClick={() => setShowSolution(!showSolution)}
+            >
+              {showSolution ? 'Hide Solution' : 'Show Solution'}
+            </button>
+
+            {showSolution && (
+              <pre className="mt-3 bg-light p-3 rounded text-start overflow-auto">
+                <code>{problem.solution.trim()}</code>
+              </pre>
+            )}
+          </div>
         )}
       </div>
       <Footer />
