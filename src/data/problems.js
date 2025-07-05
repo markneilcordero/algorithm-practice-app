@@ -564,4 +564,162 @@ function networkDelayTime(times, n, k) {
 }
 `.trim()
   }
+,
+{
+    id: 'transpose-matrix',
+    title: 'Transpose Matrix',
+    description: 'Given a 2D array (matrix), return the transpose of the matrix.',
+    difficulty: 'Easy',
+    tags: ['Matrix'],
+    examples: [
+      { input: '[[1,2,3],[4,5,6]]', output: '[[1,4],[2,5],[3,6]]' }
+    ],
+    testCases: [
+      { input: [[[1,2,3],[4,5,6]]], expected: [[1,4],[2,5],[3,6]] },
+      { input: [[[1]]], expected: [[1]] }
+    ],
+    solution: `
+function transpose(matrix) {
+  const rows = matrix.length, cols = matrix[0].length;
+  const result = Array.from({ length: cols }, () => Array(rows));
+  for (let i = 0; i < rows; i++) {
+    for (let j = 0; j < cols; j++) {
+      result[j][i] = matrix[i][j];
+    }
+  }
+  return result;
+}
+`.trim()
+  },
+  {
+    id: 'binary-search',
+    title: 'Binary Search',
+    description: 'Implement binary search on a sorted array. Return the index of the target if found, else return -1.',
+    difficulty: 'Medium',
+    tags: ['Array', 'Searching'],
+    examples: [
+      { input: '[1, 3, 5, 7, 9], target = 5', output: '2' }
+    ],
+    testCases: [
+      { input: [[1,3,5,7,9], 5], expected: 2 },
+      { input: [[1,3,5,7,9], 4], expected: -1 }
+    ],
+    solution: `
+function binarySearch(nums, target) {
+  let left = 0, right = nums.length - 1;
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2);
+    if (nums[mid] === target) return mid;
+    if (nums[mid] < target) left = mid + 1;
+    else right = mid - 1;
+  }
+  return -1;
+}
+`.trim()
+  },
+  {
+    id: 'max-sum-subarray-size-k',
+    title: 'Maximum Sum Subarray of Size K',
+    description: 'Given an array of integers and a number k, find the maximum sum of a subarray of size k.',
+    difficulty: 'Medium',
+    tags: ['Array', 'Sliding Window'],
+    examples: [
+      { input: 'arr = [2, 1, 5, 1, 3, 2], k = 3', output: '9' }
+    ],
+    testCases: [
+      { input: [[2, 1, 5, 1, 3, 2], 3], expected: 9 },
+      { input: [[1, 9, 3, 1, 2], 2], expected: 10 }
+    ],
+    solution: `
+function maxSumSubarrayK(arr, k) {
+  let maxSum = 0, windowSum = 0;
+  for (let i = 0; i < k; i++) windowSum += arr[i];
+  maxSum = windowSum;
+  for (let i = k; i < arr.length; i++) {
+    windowSum += arr[i] - arr[i - k];
+    maxSum = Math.max(maxSum, windowSum);
+  }
+  return maxSum;
+}
+`.trim()
+  },
+  {
+    id: 'n-queens',
+    title: 'N-Queens',
+    description: 'The n-queens puzzle is the problem of placing n queens on an n×n chessboard such that no two queens attack each other. Return all distinct solutions.',
+    difficulty: 'Hard',
+    tags: ['Backtracking'],
+    examples: [
+      { input: 'n = 4', output: '[[".Q..","...Q","Q...","..Q."],["..Q.","Q...","...Q",".Q.."]]' }
+    ],
+    testCases: [
+      { input: [4], expected: [[".Q..","...Q","Q...","..Q."],["..Q.","Q...","...Q",".Q.."]] }
+    ],
+    solution: `
+function solveNQueens(n) {
+  const res = [];
+  const board = Array(n).fill().map(() => '.'.repeat(n));
+  const cols = new Set(), diag1 = new Set(), diag2 = new Set();
+
+  function backtrack(r, temp) {
+    if (r === n) return res.push([...temp]);
+    for (let c = 0; c < n; c++) {
+      if (cols.has(c) || diag1.has(r - c) || diag2.has(r + c)) continue;
+      const row = '.'.repeat(c) + 'Q' + '.'.repeat(n - c - 1);
+      cols.add(c); diag1.add(r - c); diag2.add(r + c);
+      backtrack(r + 1, [...temp, row]);
+      cols.delete(c); diag1.delete(r - c); diag2.delete(r + c);
+    }
+  }
+
+  backtrack(0, []);
+  return res;
+}
+`.trim()
+  },
+  {
+    id: 'serialize-deserialize-binary-tree',
+    title: 'Serialize and Deserialize Binary Tree',
+    description: 'Design an algorithm to serialize and deserialize a binary tree. Encoding should be efficient and decoding should recreate the original structure.',
+    difficulty: 'Hard',
+    tags: ['Tree'],
+    examples: [
+      { input: 'root = [1,2,3,null,null,4,5]', output: 'Serialized + Deserialized tree matches' }
+    ],
+    testCases: [
+      { input: [{ val: 1, left: { val: 2 }, right: { val: 3, left: { val: 4 }, right: { val: 5 } } }], expected: 'Matches after deserialization' }
+    ],
+    solution: `
+function serialize(root) {
+  const res = [];
+  function dfs(node) {
+    if (!node) {
+      res.push('#');
+      return;
+    }
+    res.push(node.val);
+    dfs(node.left);
+    dfs(node.right);
+  }
+  dfs(root);
+  return res.join(',');
+}
+
+function deserialize(data) {
+  const vals = data.split(',');
+  let i = 0;
+  function build() {
+    if (vals[i] === '#') {
+      i++;
+      return null;
+    }
+    const node = { val: parseInt(vals[i++]), left: null, right: null };
+    node.left = build();
+    node.right = build();
+    return node;
+  }
+  return build();
+}
+`.trim()
+  }
 ];
