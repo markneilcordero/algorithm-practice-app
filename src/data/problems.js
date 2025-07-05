@@ -415,4 +415,153 @@ function maxCoins(nums) {
 }
 `.trim()
   }
+,
+{
+    id: 'count-set-bits',
+    title: 'Count Set Bits',
+    description: 'Given a non-negative integer, return the number of 1-bits it has (also known as the Hamming weight).',
+    difficulty: 'Easy',
+    tags: ['Bit Mask'],
+    examples: [
+      { input: '11', output: '3' }, // 1011
+      { input: '128', output: '1' }
+    ],
+    testCases: [
+      { input: [11], expected: 3 },
+      { input: [128], expected: 1 }
+    ],
+    solution: `
+function hammingWeight(n) {
+  let count = 0;
+  while (n !== 0) {
+    count += n & 1;
+    n >>>= 1;
+  }
+  return count;
+}
+`.trim()
+  },
+  {
+    id: 'lowest-common-ancestor-bst',
+    title: 'Lowest Common Ancestor in BST',
+    description: 'Given a binary search tree (BST), find the lowest common ancestor (LCA) of two given nodes.',
+    difficulty: 'Medium',
+    tags: ['Tree'],
+    examples: [
+      { input: 'root = [6,2,8,0,4,7,9], p = 2, q = 8', output: '6' }
+    ],
+    testCases: [
+      { input: [{ val: 6, left: { val: 2 }, right: { val: 8 } }, 2, 8], expected: 6 }
+    ],
+    solution: `
+function lowestCommonAncestor(root, p, q) {
+  if (p < root.val && q < root.val)
+    return lowestCommonAncestor(root.left, p, q);
+  if (p > root.val && q > root.val)
+    return lowestCommonAncestor(root.right, p, q);
+  return root.val;
+}
+`.trim()
+  },
+  {
+    id: 'friend-circles',
+    title: 'Friend Circles (Disjoint Set)',
+    description: 'There are N students in a class. Some of them are friends. If A is friends with B and B is friends with C, then A is also friends with C. Find the number of friend circles.',
+    difficulty: 'Medium',
+    tags: ['Graph', 'Disjoint Set'],
+    examples: [
+      { input: '[[1,1,0],[1,1,0],[0,0,1]]', output: '2' }
+    ],
+    testCases: [
+      { input: [[[1,1,0],[1,1,0],[0,0,1]]], expected: 2 }
+    ],
+    solution: `
+function findCircleNum(M) {
+  const n = M.length;
+  const parent = Array(n).fill(0).map((_, i) => i);
+  function find(i) {
+    if (parent[i] !== i) parent[i] = find(parent[i]);
+    return parent[i];
+  }
+  function union(i, j) {
+    parent[find(i)] = find(j);
+  }
+  for (let i = 0; i < n; i++) {
+    for (let j = i + 1; j < n; j++) {
+      if (M[i][j] === 1) union(i, j);
+    }
+  }
+  const uniqueParents = new Set(parent.map(find));
+  return uniqueParents.size;
+}
+`.trim()
+  },
+  {
+    id: 'word-break',
+    title: 'Word Break',
+    description: 'Given a string and a dictionary of words, determine if the string can be segmented into a space-separated sequence of one or more dictionary words.',
+    difficulty: 'Hard',
+    tags: ['Dynamic Programming', 'Trie'],
+    examples: [
+      { input: 's = "leetcode", wordDict = ["leet","code"]', output: 'true' }
+    ],
+    testCases: [
+      { input: ["leetcode", ["leet","code"]], expected: true },
+      { input: ["applepenapple", ["apple","pen"]], expected: true },
+      { input: ["catsandog", ["cats","dog","sand","and","cat"]], expected: false }
+    ],
+    solution: `
+function wordBreak(s, wordDict) {
+  const wordSet = new Set(wordDict);
+  const dp = Array(s.length + 1).fill(false);
+  dp[0] = true;
+  for (let i = 1; i <= s.length; i++) {
+    for (let j = 0; j < i; j++) {
+      if (dp[j] && wordSet.has(s.slice(j, i))) {
+        dp[i] = true;
+        break;
+      }
+    }
+  }
+  return dp[s.length];
+}
+`.trim()
+  },
+  {
+    id: 'network-delay-time',
+    title: 'Network Delay Time',
+    description: 'You are given a network represented as a list of travel times as directed edges. Find the time it takes for all nodes to receive the signal from a source.',
+    difficulty: 'Hard',
+    tags: ['Graph', 'Dijkstra'],
+    examples: [
+      { input: 'times = [[2,1,1],[2,3,1],[3,4,1]], n = 4, k = 2', output: '2' }
+    ],
+    testCases: [
+      { input: [[[2,1,1],[2,3,1],[3,4,1]], 4, 2], expected: 2 }
+    ],
+    solution: `
+function networkDelayTime(times, n, k) {
+  const adj = Array.from({ length: n + 1 }, () => []);
+  for (const [u, v, w] of times) {
+    adj[u].push([v, w]);
+  }
+  const dist = Array(n + 1).fill(Infinity);
+  dist[k] = 0;
+  const pq = [[0, k]];
+  while (pq.length) {
+    pq.sort((a, b) => b[0] - a[0]);
+    const [time, node] = pq.pop();
+    if (time > dist[node]) continue;
+    for (const [nei, wt] of adj[node]) {
+      if (dist[nei] > time + wt) {
+        dist[nei] = time + wt;
+        pq.push([dist[nei], nei]);
+      }
+    }
+  }
+  const max = Math.max(...dist.slice(1));
+  return max === Infinity ? -1 : max;
+}
+`.trim()
+  }
 ];
