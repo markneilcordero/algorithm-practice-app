@@ -123,4 +123,154 @@ function coinChange(coins, amount) {
 }
 `.trim()
   }
+,
+  {
+    id: 'first-unique-char',
+    title: 'First Unique Character in String',
+    description: 'Given a string, return the index of the first non-repeating character. If none exists, return -1.',
+    difficulty: 'Easy',
+    tags: ['Hashing'],
+    examples: [
+      { input: '"leetcode"', output: '0' },
+      { input: '"aabb"', output: '-1' }
+    ],
+    testCases: [
+      { input: ["leetcode"], expected: 0 },
+      { input: ["loveleetcode"], expected: 2 },
+      { input: ["aabb"], expected: -1 }
+    ],
+    solution: `
+function firstUniqChar(s) {
+  const count = {};
+  for (let char of s) count[char] = (count[char] || 0) + 1;
+  for (let i = 0; i < s.length; i++) {
+    if (count[s[i]] === 1) return i;
+  }
+  return -1;
+}
+`.trim()
+  },
+  {
+    id: 'implement-queue-using-stacks',
+    title: 'Implement Queue using Stacks',
+    description: 'Implement a queue using two stacks. Your queue should support enqueue and dequeue operations.',
+    difficulty: 'Medium',
+    tags: ['Stack', 'Queue'],
+    examples: [
+      { input: 'enqueue(1), enqueue(2), dequeue() → 1', output: '1' }
+    ],
+    testCases: [
+      { input: [], expected: undefined } // This is a design problem, so it's more for interactive testing
+    ],
+    solution: `
+class MyQueue {
+  constructor() {
+    this.stack1 = [];
+    this.stack2 = [];
+  }
+
+  enqueue(x) {
+    this.stack1.push(x);
+  }
+
+  dequeue() {
+    if (!this.stack2.length) {
+      while (this.stack1.length) {
+        this.stack2.push(this.stack1.pop());
+      }
+    }
+    return this.stack2.pop();
+  }
+}
+`.trim()
+  },
+  {
+    id: 'detect-cycle-in-linkedlist',
+    title: 'Detect Cycle in Linked List',
+    description: 'Given the head of a linked list, determine if the list has a cycle.',
+    difficulty: 'Medium',
+    tags: ['Linked List', 'Two Pointers'],
+    examples: [
+      { input: 'head = [3,2,0,-4], pos = 1', output: 'true' }
+    ],
+    testCases: [
+      { input: [], expected: false } // Can't simulate in pure data — needs linked list setup
+    ],
+    solution: `
+function hasCycle(head) {
+  let slow = head, fast = head;
+  while (fast && fast.next) {
+    slow = slow.next;
+    fast = fast.next.next;
+    if (slow === fast) return true;
+  }
+  return false;
+}
+`.trim()
+  },
+  {
+    id: 'word-search',
+    title: 'Word Search in Grid',
+    description: 'Given a 2D board and a word, return true if the word exists in the grid. The word must be constructed from letters of sequentially adjacent cells (horizontal/vertical).',
+    difficulty: 'Hard',
+    tags: ['Backtracking'],
+    examples: [
+      { input: 'board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCCED"', output: 'true' }
+    ],
+    testCases: [
+      { input: [[["A","B"],["C","D"]], "ABCD"], expected: false }
+    ],
+    solution: `
+function exist(board, word) {
+  const rows = board.length, cols = board[0].length;
+  const dfs = (i, j, k) => {
+    if (i < 0 || i >= rows || j < 0 || j >= cols || board[i][j] !== word[k]) return false;
+    if (k === word.length - 1) return true;
+    const tmp = board[i][j];
+    board[i][j] = '#';
+    const found = dfs(i+1,j,k+1)||dfs(i-1,j,k+1)||dfs(i,j+1,k+1)||dfs(i,j-1,k+1);
+    board[i][j] = tmp;
+    return found;
+  };
+  for (let i = 0; i < rows; i++) {
+    for (let j = 0; j < cols; j++) {
+      if (dfs(i, j, 0)) return true;
+    }
+  }
+  return false;
+}
+`.trim()
+  },
+  {
+    id: 'number-of-islands',
+    title: 'Number of Islands',
+    description: 'Given a 2D grid of "1"s (land) and "0"s (water), return the number of islands. An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically.',
+    difficulty: 'Hard',
+    tags: ['Graph', 'DFS'],
+    examples: [
+      { input: '[["1","1","0","0"],["1","0","0","1"],["0","0","1","1"]]', output: '3' }
+    ],
+    testCases: [
+      { input: [[["1","1","0"],["0","1","0"],["1","0","1"]]], expected: 3 }
+    ],
+    solution: `
+function numIslands(grid) {
+  let count = 0;
+  const dfs = (i, j) => {
+    if (i < 0 || j < 0 || i >= grid.length || j >= grid[0].length || grid[i][j] !== '1') return;
+    grid[i][j] = '0';
+    dfs(i+1,j); dfs(i-1,j); dfs(i,j+1); dfs(i,j-1);
+  };
+  for (let i = 0; i < grid.length; i++) {
+    for (let j = 0; j < grid[0].length; j++) {
+      if (grid[i][j] === '1') {
+        dfs(i, j);
+        count++;
+      }
+    }
+  }
+  return count;
+}
+`.trim()
+  }
 ];
