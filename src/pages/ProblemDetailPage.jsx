@@ -12,7 +12,12 @@ import StatusBadge from '../components/StatusBadge';
 import ExampleBox from '../components/ExampleBox';
 
 import { problems } from '../data/problems';
-import { getProblemStatus, saveUserCode, getUserCode, markProblemSolved } from '../utils/localStorage';
+import {
+  getProblemStatus,
+  saveUserCode,
+  getUserCode,
+  markProblemSolved
+} from '../utils/localStorage';
 import { runTests } from '../utils/testRunner';
 
 const ProblemDetailPage = () => {
@@ -70,18 +75,7 @@ const ProblemDetailPage = () => {
           </>
         )}
 
-        <h5 className="mt-4">💻 Code Editor</h5>
-        <CodeEditor code={code} setCode={setCode} />
-
-        <SubmitButton onClick={handleSubmit} />
-
-        {testResults && (
-          <>
-            <h5 className="mt-4">🧪 Test Results</h5>
-            <TestCaseRunner results={testResults} />
-          </>
-        )}
-
+        {/* 🔍 Show Solution Block (moved up) */}
         {problem.solution && (
           <div className="mt-4">
             <button
@@ -97,6 +91,18 @@ const ProblemDetailPage = () => {
               </pre>
             )}
           </div>
+        )}
+
+        <h5 className="mt-4">💻 Code Editor</h5>
+        <CodeEditor code={code} setCode={setCode} />
+
+        <SubmitButton onClick={handleSubmit} />
+
+        {testResults && (
+          <>
+            <h5 className="mt-4">🧪 Test Results</h5>
+            <TestCaseRunner results={testResults} />
+          </>
         )}
       </div>
       <Footer />
