@@ -86,9 +86,17 @@ const ProblemDetailPage = () => {
             </button>
 
             {showSolution && (
-              <pre className="mt-3 bg-light p-3 rounded text-start overflow-auto">
-                <code>{problem.solution.trim()}</code>
-              </pre>
+              <pre className="mt-3 p-3 rounded text-start overflow-auto" style={{
+  backgroundColor: '#fff8dc',
+  color: '#2c3e50',
+  fontFamily: 'monospace',
+  fontSize: '0.9rem',
+  border: '2px dashed #ffb347',
+  borderRadius: '12px',
+}}>
+  <code>{problem.solution.trim()}</code>
+</pre>
+
             )}
           </div>
         )}
