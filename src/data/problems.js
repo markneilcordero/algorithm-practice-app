@@ -596,4 +596,305 @@ function exist(board, word) {
 }
 `.trim()
 }
+,
+{
+  id: 'sum-of-array',
+  title: 'Sum of Array using Recursion',
+  description: 'Return the sum of all numbers in the array using recursion.',
+  difficulty: 'Easy',
+  tags: ['Array', 'Recursion'],
+  examples: [
+    { input: '[1, 2, 3, 4]', output: '10' }
+  ],
+  testCases: [
+    { input: [[1, 2, 3, 4]], expected: 10 }
+  ],
+  solution: `
+function sumArray(arr) {
+  if (arr.length === 0) return 0
+  return arr[0] + sumArray(arr.slice(1))
+}
+`.trim()
+},
+{
+  id: 'remove-outer-parentheses',
+  title: 'Remove Outer Parentheses',
+  description: 'Remove the outermost parentheses from every primitive string.',
+  difficulty: 'Easy',
+  tags: ['Stack'],
+  examples: [
+    { input: '"(()())(())"', output: '"()()()"' }
+  ],
+  testCases: [
+    { input: ['(()())(())'], expected: '()()()' }
+  ],
+  solution: `
+function removeOuterParentheses(s) {
+  let res = '', open = 0
+  for (let c of s) {
+    if (c === '(') {
+      if (open > 0) res += c
+      open++
+    } else {
+      open--
+      if (open > 0) res += c
+    }
+  }
+  return res
+}
+`.trim()
+},
+{
+  id: 'sum-left-leaves',
+  title: 'Sum of Left Leaves',
+  description: 'Return the sum of all left leaf nodes in a binary tree.',
+  difficulty: 'Medium',
+  tags: ['Tree', 'Recursion'],
+  examples: [
+    { input: 'root = [3,9,20,null,null,15,7]', output: '24' }
+  ],
+  testCases: [
+    {
+      input: [{
+        val: 3,
+        left: { val: 9, left: null, right: null },
+        right: {
+          val: 20,
+          left: { val: 15, left: null, right: null },
+          right: { val: 7, left: null, right: null }
+        }
+      }],
+      expected: 24
+    }
+  ],
+  solution: `
+function sumOfLeftLeaves(root) {
+  if (!root) return 0
+  let sum = 0
+  if (root.left && !root.left.left && !root.left.right) {
+    sum += root.left.val
+  }
+  return sum + sumOfLeftLeaves(root.left) + sumOfLeftLeaves(root.right)
+}
+`.trim()
+},
+{
+  id: 'shortest-path-binary-matrix',
+  title: 'Shortest Path in Binary Matrix',
+  description: 'Find the shortest path from top-left to bottom-right in a binary grid.',
+  difficulty: 'Medium',
+  tags: ['Queue', 'Graph'],
+  examples: [
+    { input: '[[0,1],[1,0]]', output: '2' }
+  ],
+  testCases: [
+    { input: [[[0,1],[1,0]]], expected: 2 }
+  ],
+  solution: `
+function shortestPathBinaryMatrix(grid) {
+  const n = grid.length
+  if (grid[0][0] || grid[n-1][n-1]) return -1
+  const dirs = [[0,1],[1,0],[1,1],[-1,0],[0,-1],[-1,-1],[1,-1],[-1,1]]
+  const queue = [[0,0,1]]
+  grid[0][0] = 1
+  while (queue.length) {
+    const [x, y, d] = queue.shift()
+    if (x === n - 1 && y === n - 1) return d
+    for (let [dx, dy] of dirs) {
+      const nx = x + dx, ny = y + dy
+      if (nx >= 0 && ny >= 0 && nx < n && ny < n && grid[nx][ny] === 0) {
+        queue.push([nx, ny, d + 1])
+        grid[nx][ny] = 1
+      }
+    }
+  }
+  return -1
+}
+`.trim()
+},
+{
+  id: 'reconstruct-blockchain-order',
+  title: 'Reconstruct Blockchain Order',
+  description: 'Given unordered blocks, reconstruct the chain in order.',
+  difficulty: 'Hard',
+  tags: ['Blockchain', 'Hashing', 'Array'],
+  examples: [
+    {
+      input: '[{hash: "b", prev: "a"}, {hash: "a", prev: "0"}, {hash: "c", prev: "b"}]',
+      output: '[{hash: "a", prev: "0"}, {hash: "b", prev: "a"}, {hash: "c", prev: "b"}]'
+    }
+  ],
+  testCases: [
+    {
+      input: [[
+        { hash: "b", prev: "a" },
+        { hash: "a", prev: "0" },
+        { hash: "c", prev: "b" }
+      ]],
+      expected: [
+        { hash: "a", prev: "0" },
+        { hash: "b", prev: "a" },
+        { hash: "c", prev: "b" }
+      ]
+    }
+  ],
+  solution: `
+function reconstructChain(blocks) {
+  const map = {}, result = []
+  let start = null
+  for (let b of blocks) {
+    map[b.prev] = b
+  }
+  let curr = map["0"]
+  while (curr) {
+    result.push(curr)
+    curr = map[curr.hash]
+  }
+  return result
+}
+`.trim()
+},
+{
+  id: 'two-sum',
+  title: 'Two Sum',
+  description: 'Find two numbers that add up to the target.',
+  difficulty: 'Easy',
+  tags: ['Array', 'Hashing'],
+  examples: [
+    { input: '[2, 7, 11, 15], target = 9', output: '[0, 1]' }
+  ],
+  testCases: [
+    { input: [[2, 7, 11, 15], 9], expected: [0, 1] }
+  ],
+  solution: `
+function twoSum(nums, target) {
+  const map = {}
+  for (let i = 0; i < nums.length; i++) {
+    const diff = target - nums[i]
+    if (diff in map) return [map[diff], i]
+    map[nums[i]] = i
+  }
+}
+`.trim()
+},
+{
+  id: 'reverse-string-stack',
+  title: 'Reverse String using Stack',
+  description: 'Reverse a given string using a stack.',
+  difficulty: 'Easy',
+  tags: ['Stack'],
+  examples: [
+    { input: '"hello"', output: '"olleh"' }
+  ],
+  testCases: [
+    { input: ["hello"], expected: "olleh" }
+  ],
+  solution: `
+function reverseString(s) {
+  const stack = s.split('')
+  let res = ''
+  while (stack.length) {
+    res += stack.pop()
+  }
+  return res
+}
+`.trim()
+},
+{
+  id: 'power-set',
+  title: 'Power Set',
+  description: 'Return all subsets of a given set.',
+  difficulty: 'Medium',
+  tags: ['Array', 'Recursion', 'Backtracking'],
+  examples: [
+    { input: '[1, 2, 3]', output: '[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]' }
+  ],
+  testCases: [
+    { input: [[1, 2, 3]], expected: [[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]] }
+  ],
+  solution: `
+function subsets(nums) {
+  const res = []
+  function backtrack(start, path) {
+    res.push([...path])
+    for (let i = start; i < nums.length; i++) {
+      path.push(nums[i])
+      backtrack(i + 1, path)
+      path.pop()
+    }
+  }
+  backtrack(0, [])
+  return res
+}
+`.trim()
+},
+{
+  id: 'level-order-traversal',
+  title: 'Binary Tree Level Order Traversal',
+  description: 'Return the level order traversal of a binary tree.',
+  difficulty: 'Medium',
+  tags: ['Tree', 'Queue'],
+  examples: [
+    { input: 'root = [3,9,20,null,null,15,7]', output: '[[3],[9,20],[15,7]]' }
+  ],
+  testCases: [
+    {
+      input: [{
+        val: 3,
+        left: { val: 9, left: null, right: null },
+        right: {
+          val: 20,
+          left: { val: 15, left: null, right: null },
+          right: { val: 7, left: null, right: null }
+        }
+      }],
+      expected: [[3],[9,20],[15,7]]
+    }
+  ],
+  solution: `
+function levelOrder(root) {
+  const res = []
+  if (!root) return res
+  const queue = [root]
+  while (queue.length) {
+    const level = []
+    const size = queue.length
+    for (let i = 0; i < size; i++) {
+      const node = queue.shift()
+      level.push(node.val)
+      if (node.left) queue.push(node.left)
+      if (node.right) queue.push(node.right)
+    }
+    res.push(level)
+  }
+  return res
+}
+`.trim()
+},
+{
+  id: 'jump-game-ii',
+  title: 'Jump Game II',
+  description: 'Return the minimum number of jumps to reach the end of the array.',
+  difficulty: 'Hard',
+  tags: ['Array', 'Greedy', 'Dynamic Programming'],
+  examples: [
+    { input: '[2,3,1,1,4]', output: '2' }
+  ],
+  testCases: [
+    { input: [[2,3,1,1,4]], expected: 2 }
+  ],
+  solution: `
+function jump(nums) {
+  let jumps = 0, far = 0, end = 0
+  for (let i = 0; i < nums.length - 1; i++) {
+    far = Math.max(far, i + nums[i])
+    if (i === end) {
+      jumps++
+      end = far
+    }
+  }
+  return jumps
+}
+`.trim()
+}
 ];
