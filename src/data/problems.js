@@ -339,4 +339,155 @@ function validateBlockchain(chain) {
 }
 `.trim()
 }
+,
+// ✅ Easy - Sorting
+{
+  id: 'sort-array-ascending',
+  title: 'Sort Array in Ascending Order',
+  description: 'Sort an array of integers in ascending order.',
+  difficulty: 'Easy',
+  tags: ['Array', 'Sorting'],
+  examples: [
+    { input: '[5, 2, 9, 1]', output: '[1, 2, 5, 9]' }
+  ],
+  testCases: [
+    { input: [[5, 2, 9, 1]], expected: [1, 2, 5, 9] }
+  ],
+  solution: `
+function sortArray(arr) {
+  return arr.sort((a, b) => a - b)
+}
+`.trim()
+},
+
+// ✅ Easy - Hashing
+{
+  id: 'contains-duplicate',
+  title: 'Contains Duplicate',
+  description: 'Check if any number appears more than once in the array.',
+  difficulty: 'Easy',
+  tags: ['Array', 'Hashing'],
+  examples: [
+    { input: '[1,2,3,1]', output: 'true' },
+    { input: '[1,2,3,4]', output: 'false' }
+  ],
+  testCases: [
+    { input: [[1, 2, 3, 1]], expected: true },
+    { input: [[1, 2, 3, 4]], expected: false }
+  ],
+  solution: `
+function containsDuplicate(nums) {
+  const set = new Set()
+  for (let num of nums) {
+    if (set.has(num)) return true
+    set.add(num)
+  }
+  return false
+}
+`.trim()
+},
+
+// ✅ Medium - Graph
+{
+  id: 'has-path-dfs',
+  title: 'Graph Path Exists (DFS)',
+  description: 'Given a graph and two nodes, determine if a path exists using DFS.',
+  difficulty: 'Medium',
+  tags: ['Graph'],
+  examples: [
+    { input: 'edges = [["a","b"],["b","c"],["c","d"]], start = "a", end = "d"', output: 'true' }
+  ],
+  testCases: [
+    { input: [[["a","b"],["b","c"],["c","d"]], "a", "d"], expected: true },
+    { input: [[["a","b"],["c","d"]], "a", "d"], expected: false }
+  ],
+  solution: `
+function hasPath(edges, start, end) {
+  const graph = {}
+  for (let [a, b] of edges) {
+    if (!graph[a]) graph[a] = []
+    if (!graph[b]) graph[b] = []
+    graph[a].push(b)
+    graph[b].push(a)
+  }
+  const visited = new Set()
+  function dfs(node) {
+    if (node === end) return true
+    if (visited.has(node)) return false
+    visited.add(node)
+    for (let neighbor of graph[node]) {
+      if (dfs(neighbor)) return true
+    }
+    return false
+  }
+  return dfs(start)
+}
+`.trim()
+},
+
+// ✅ Medium - Tree
+{
+  id: 'max-depth-binary-tree',
+  title: 'Maximum Depth of Binary Tree',
+  description: 'Return the maximum depth of a binary tree.',
+  difficulty: 'Medium',
+  tags: ['Tree', 'Recursion'],
+  examples: [
+    { input: 'root = [3,9,20,null,null,15,7]', output: '3' }
+  ],
+  testCases: [
+    {
+      input: [{
+        val: 3,
+        left: { val: 9, left: null, right: null },
+        right: {
+          val: 20,
+          left: { val: 15, left: null, right: null },
+          right: { val: 7, left: null, right: null }
+        }
+      }],
+      expected: 3
+    }
+  ],
+  solution: `
+function maxDepth(root) {
+  if (!root) return 0
+  return 1 + Math.max(maxDepth(root.left), maxDepth(root.right))
+}
+`.trim()
+},
+
+// ✅ Hard - Dynamic Programming + Backtracking
+{
+  id: 'word-break',
+  title: 'Word Break',
+  description: 'Return true if the string can be segmented into space-separated words from the dictionary.',
+  difficulty: 'Hard',
+  tags: ['Dynamic Programming', 'Backtracking'],
+  examples: [
+    { input: 's = "leetcode", wordDict = ["leet", "code"]', output: 'true' }
+  ],
+  testCases: [
+    { input: ["leetcode", ["leet", "code"]], expected: true },
+    { input: ["applepenapple", ["apple", "pen"]], expected: true },
+    { input: ["catsandog", ["cats", "dog", "sand", "and", "cat"]], expected: false }
+  ],
+  solution: `
+function wordBreak(s, wordDict) {
+  const dp = Array(s.length + 1).fill(false)
+  dp[0] = true
+  for (let i = 1; i <= s.length; i++) {
+    for (let word of wordDict) {
+      if (i >= word.length && s.slice(i - word.length, i) === word) {
+        if (dp[i - word.length]) {
+          dp[i] = true
+          break
+        }
+      }
+    }
+  }
+  return dp[s.length]
+}
+`.trim()
+}
 ];
