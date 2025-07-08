@@ -24,21 +24,24 @@ const shuffleArray = (arr) => {
 const ProblemListPage = () => {
   const [difficultyFilter, setDifficultyFilter] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
-  const [shuffledProblems, setShuffledProblems] = useState([]);
   const [filteredProblems, setFilteredProblems] = useState([]);
 
-  // 🔀 Shuffle once on mount
-  useEffect(() => {
-    setShuffledProblems(shuffleArray(problems));
-  }, []);
+  const shuffleArray = (arr) => {
+    const shuffled = [...arr];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  };
 
-  // 🎯 Re-apply filter/search whenever filter/search term changes
   useEffect(() => {
-    let result = [...shuffledProblems];
+    let result = [...problems];
     result = filterProblems(result, difficultyFilter);
     result = searchProblems(result, searchTerm);
+    result = shuffleArray(result); // ✅ shuffle here
     setFilteredProblems(result);
-  }, [difficultyFilter, searchTerm, shuffledProblems]);
+  }, [difficultyFilter, searchTerm]);
 
   return (
     <>
