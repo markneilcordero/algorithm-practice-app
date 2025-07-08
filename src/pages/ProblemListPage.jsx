@@ -7,10 +7,19 @@ import ProblemFilterBar from '../components/ProblemFilterBar';
 import ProblemSearchBar from '../components/ProblemSearchBar';
 import NoResults from '../components/NoResults';
 
-import { problems } from '../data/problems';
+import { problems as originalProblems } from '../data/problems';
 import { getProblemStatus } from '../utils/localStorage';
 import { filterProblems } from '../utils/filterUtils';
 import { searchProblems } from '../utils/searchUtils';
+
+const shuffleArray = (arr) => {
+  const shuffled = [...arr];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+};
 
 const ProblemListPage = () => {
   const [difficultyFilter, setDifficultyFilter] = useState('All');
@@ -18,12 +27,9 @@ const ProblemListPage = () => {
   const [filteredProblems, setFilteredProblems] = useState([]);
 
   useEffect(() => {
-    let result = [...problems];
+    let result = shuffleArray(originalProblems); // 👈 Shuffle before filter
 
-    // Filter by difficulty
     result = filterProblems(result, difficultyFilter);
-
-    // Apply search
     result = searchProblems(result, searchTerm);
 
     setFilteredProblems(result);
