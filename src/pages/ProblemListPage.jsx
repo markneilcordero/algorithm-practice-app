@@ -12,6 +12,7 @@ import { getProblemStatus } from '../utils/localStorage';
 import { filterProblems } from '../utils/filterUtils';
 import { searchProblems } from '../utils/searchUtils';
 
+// ✅ Define shuffle only once (outside the component)
 const shuffleArray = (arr) => {
   const shuffled = [...arr];
   for (let i = shuffled.length - 1; i > 0; i--) {
@@ -26,21 +27,11 @@ const ProblemListPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredProblems, setFilteredProblems] = useState([]);
 
-  const shuffleArray = (arr) => {
-    const shuffled = [...arr];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
-  };
-
   useEffect(() => {
-    let result = [...problems];
-    result = filterProblems(result, difficultyFilter);
-    result = searchProblems(result, searchTerm);
-    result = shuffleArray(result); // ✅ shuffle here
-    setFilteredProblems(result);
+    let result = filterProblems(problems, difficultyFilter); // filter first
+    result = searchProblems(result, searchTerm);             // then search
+    result = shuffleArray(result);                           // then shuffle
+    setFilteredProblems(result);                             // update state
   }, [difficultyFilter, searchTerm]);
 
   return (
