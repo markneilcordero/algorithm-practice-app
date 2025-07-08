@@ -1,8 +1,8 @@
 export function filterProblems(problems, difficulty) {
   const normalizedDifficulty = difficulty.trim().toLowerCase();
 
-  // ✅ Filter first based on difficulty
-  let filtered = difficulty === 'All'
+  // Step 1: Filter problems by difficulty
+  const filtered = difficulty === 'All'
     ? problems
     : problems.filter(
         (problem) =>
@@ -10,11 +10,11 @@ export function filterProblems(problems, difficulty) {
           problem.difficulty.trim().toLowerCase() === normalizedDifficulty
       );
 
-  // ✅ (Optional) deduplicate AFTER filtering (if needed)
-  return deduplicateProblems(filtered);
+  // Step 2: Remove duplicates by ID within this filtered result
+  return deduplicateById(filtered);
 }
 
-function deduplicateProblems(problems) {
+function deduplicateById(problems) {
   const seen = new Set();
   return problems.filter((problem) => {
     if (seen.has(problem.id)) return false;
