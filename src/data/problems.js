@@ -490,4 +490,110 @@ function wordBreak(s, wordDict) {
 }
 `.trim()
 }
+,
+{
+  id: 'next-greater-element',
+  title: 'Next Greater Element',
+  description: 'Find the next greater element for each element in the array.',
+  difficulty: 'Easy',
+  tags: ['Array', 'Stack'],
+  examples: [
+    { input: '[2, 1, 2, 4, 3]', output: '[4, 2, 4, -1, -1]' }
+  ],
+  testCases: [
+    { input: [[2, 1, 2, 4, 3]], expected: [4, 2, 4, -1, -1] }
+  ],
+  solution: `
+function nextGreaterElements(nums) {
+  const res = Array(nums.length).fill(-1)
+  const stack = []
+  for (let i = 0; i < nums.length; i++) {
+    while (stack.length && nums[i] > nums[stack[stack.length - 1]]) {
+      res[stack.pop()] = nums[i]
+    }
+    stack.push(i)
+  }
+  return res
+}
+`.trim()
+},
+{
+  id: 'detect-cycle',
+  title: 'Detect Cycle in Linked List',
+  description: 'Check if a linked list has a cycle.',
+  difficulty: 'Medium',
+  tags: ['Linked List', 'Recursion'],
+  examples: [
+    { input: 'head = [3,2,0,-4] with pos = 1', output: 'true' }
+  ],
+  testCases: [
+    {
+      input: [{
+        val: 3,
+        next: {
+          val: 2,
+          next: {
+            val: 0,
+            next: {
+              val: -4,
+              next: null // then manually cycle back to node with val: 2
+            }
+          }
+        }
+      }],
+      expected: true
+    }
+  ],
+  solution: `
+function hasCycle(head) {
+  let slow = head, fast = head
+  while (fast && fast.next) {
+    slow = slow.next
+    fast = fast.next.next
+    if (slow === fast) return true
+  }
+  return false
+}
+`.trim()
+},
+{
+  id: 'word-search',
+  title: 'Word Search in Grid',
+  description: 'Given a grid of letters, determine if a word exists in the grid.',
+  difficulty: 'Hard',
+  tags: ['Graph', 'Backtracking'],
+  examples: [
+    { input: 'board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCCED"', output: 'true' }
+  ],
+  testCases: [
+    {
+      input: [[
+        ["A","B","C","E"],
+        ["S","F","C","S"],
+        ["A","D","E","E"]
+      ], "ABCCED"],
+      expected: true
+    }
+  ],
+  solution: `
+function exist(board, word) {
+  const rows = board.length, cols = board[0].length
+  const dfs = (r, c, i) => {
+    if (i === word.length) return true
+    if (r < 0 || c < 0 || r >= rows || c >= cols || board[r][c] !== word[i]) return false
+    const temp = board[r][c]
+    board[r][c] = '#'
+    const found = dfs(r+1,c,i+1) || dfs(r-1,c,i+1) || dfs(r,c+1,i+1) || dfs(r,c-1,i+1)
+    board[r][c] = temp
+    return found
+  }
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (dfs(r, c, 0)) return true
+    }
+  }
+  return false
+}
+`.trim()
+}
 ];
