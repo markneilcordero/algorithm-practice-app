@@ -3207,14 +3207,14 @@ class WordBreaker {
   }
 ,
     {
-    id: 'linked-list-find-middle',
-    title: 'Find Middle of Linked List',
-    description: 'Return the middle value of a singly linked list.',
-    difficulty: 'Easy',
-    tags: ['Linked List', 'OOP'],
-    examples: [{ input: '[1, 2, 3, 4, 5]', output: '3' }],
-    testCases: [],
-    solution: `
+  id: 'linked-list-find-middle',
+  title: 'Find Middle of Linked List',
+  description: 'Return the middle value of a singly linked list.',
+  difficulty: 'Easy',
+  tags: ['Linked List', 'OOP'],
+  examples: [{ input: '[1, 2, 3, 4, 5]', output: '3' }],
+  testCases: [],
+  solution: `
 class Node {
   constructor(val) {
     this.val = val
@@ -3251,7 +3251,8 @@ class LinkedList {
   }
 }
 `.trim()
-  },
+}
+,
   {
     id: 'tree-max-depth',
     title: 'Max Depth of Binary Tree',
