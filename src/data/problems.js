@@ -171,4 +171,172 @@ function lengthOfLIS(nums) {
 }
 `.trim()
   }
+,
+// ✅ Easy - Array + Greedy
+{
+  id: 'maximum-consecutive-sum',
+  title: 'Maximum Consecutive Sum',
+  description: 'Find the maximum sum of any two consecutive numbers in an array.',
+  difficulty: 'Easy',
+  tags: ['Array', 'Greedy'],
+  examples: [
+    { input: '[1, 3, 5, 1, 9]', output: '10' },
+    { input: '[4, 2, 1, 7]', output: '8' }
+  ],
+  testCases: [
+    { input: [[1, 3, 5, 1, 9]], expected: 10 },
+    { input: [[4, 2, 1, 7]], expected: 8 }
+  ],
+  solution: `
+function maxConsecutiveSum(arr) {
+  let max = arr[0] + arr[1]
+  for (let i = 1; i < arr.length - 1; i++) {
+    max = Math.max(max, arr[i] + arr[i + 1])
+  }
+  return max
+}
+`.trim()
+},
+
+// ✅ Easy - Searching
+{
+  id: 'linear-search',
+  title: 'Linear Search',
+  description: 'Return the index of the target in an array, or -1 if not found.',
+  difficulty: 'Easy',
+  tags: ['Array', 'Searching'],
+  examples: [
+    { input: '[3, 5, 2, 9], 5', output: '1' },
+    { input: '[1, 2, 3], 4', output: '-1' }
+  ],
+  testCases: [
+    { input: [[3, 5, 2, 9], 5], expected: 1 },
+    { input: [[1, 2, 3], 4], expected: -1 }
+  ],
+  solution: `
+function linearSearch(arr, target) {
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] === target) return i
+  }
+  return -1
+}
+`.trim()
+},
+
+// ✅ Medium - Linked List
+{
+  id: 'reverse-linked-list',
+  title: 'Reverse Linked List',
+  description: 'Reverse a singly linked list and return the new head.',
+  difficulty: 'Medium',
+  tags: ['Linked List'],
+  examples: [
+    { input: '1 -> 2 -> 3 -> null', output: '3 -> 2 -> 1 -> null' }
+  ],
+  testCases: [
+    {
+      input: [{
+        val: 1, next: { val: 2, next: { val: 3, next: null } }
+      }],
+      expected: {
+        val: 3, next: { val: 2, next: { val: 1, next: null } }
+      }
+    }
+  ],
+  solution: `
+function reverseList(head) {
+  let prev = null
+  let curr = head
+  while (curr) {
+    let next = curr.next
+    curr.next = prev
+    prev = curr
+    curr = next
+  }
+  return prev
+}
+`.trim()
+},
+
+// ✅ Medium - Backtracking + Tree
+{
+  id: 'path-sum-tree',
+  title: 'Path Sum',
+  description: 'Return true if the tree has a root-to-leaf path summing to target.',
+  difficulty: 'Medium',
+  tags: ['Tree', 'Recursion', 'Backtracking'],
+  examples: [
+    { input: 'Tree = [5,4,8,11,null,13,4,7,2,null,null,null,1], targetSum = 22', output: 'true' }
+  ],
+  testCases: [
+    {
+      input: [{
+        val: 5,
+        left: {
+          val: 4,
+          left: {
+            val: 11,
+            left: { val: 7, left: null, right: null },
+            right: { val: 2, left: null, right: null }
+          },
+          right: null
+        },
+        right: {
+          val: 8,
+          left: { val: 13, left: null, right: null },
+          right: {
+            val: 4,
+            left: null,
+            right: { val: 1, left: null, right: null }
+          }
+        }
+      }, 22],
+      expected: true
+    }
+  ],
+  solution: `
+function hasPathSum(root, targetSum) {
+  if (!root) return false
+  if (!root.left && !root.right) return root.val === targetSum
+  return hasPathSum(root.left, targetSum - root.val) || hasPathSum(root.right, targetSum - root.val)
+}
+`.trim()
+},
+
+// ✅ Hard - Graph + Blockchain (chain validation)
+{
+  id: 'validate-blockchain',
+  title: 'Validate Blockchain',
+  description: 'Validate if a blockchain array is valid by checking hashes and previousHash links.',
+  difficulty: 'Hard',
+  tags: ['Graph', 'Blockchain', 'Hashing'],
+  examples: [
+    { input: '[{hash: "abc", previousHash: "0"}, {hash: "def", previousHash: "abc"}]', output: 'true' },
+    { input: '[{hash: "abc", previousHash: "0"}, {hash: "xyz", previousHash: "def"}]', output: 'false' }
+  ],
+  testCases: [
+    {
+      input: [[
+        { hash: 'abc', previousHash: '0' },
+        { hash: 'def', previousHash: 'abc' }
+      ]],
+      expected: true
+    },
+    {
+      input: [[
+        { hash: 'abc', previousHash: '0' },
+        { hash: 'xyz', previousHash: 'def' }
+      ]],
+      expected: false
+    }
+  ],
+  solution: `
+function validateBlockchain(chain) {
+  for (let i = 1; i < chain.length; i++) {
+    if (chain[i].previousHash !== chain[i - 1].hash) return false
+  }
+  return true
+}
+`.trim()
+}
 ];
