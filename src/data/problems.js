@@ -1,6 +1,6 @@
 // src/data/problems.js
 
-export const problems = [
+const problemsRaw = [
   {
     id: 'find-largest-number',
     title: 'Find the Largest Number',
@@ -3391,8 +3391,10 @@ class Blockchain {
 `.trim()
   }
 
-  function shuffleArray(array) {
-  const shuffled = [...array]; // Create a shallow copy to avoid mutating the original array
+];
+
+function shuffleArray(array) {
+  const shuffled = [...array];
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
@@ -3400,4 +3402,4 @@ class Blockchain {
   return shuffled;
 }
 
-];
+export const problems = shuffleArray(problemsRaw);
