@@ -74,6 +74,21 @@ const ProblemDetailPage = () => {
             ))}
           </>
         )}
+{problem.pseudocode && (
+  <div className="mt-4">
+    <h5>🧠 Pseudocode</h5>
+    <pre className="mt-2 p-3 rounded text-start overflow-auto" style={{
+      backgroundColor: '#f4f4f4',
+      color: '#34495e',
+      fontFamily: 'monospace',
+      fontSize: '0.9rem',
+      border: '1px solid #ccc',
+      borderRadius: '10px',
+    }}>
+      <code>{problem.pseudocode.trim()}</code>
+    </pre>
+  </div>
+)}
 
         {/* 🔍 Show Solution Block (moved up) */}
         {problem.solution && (
