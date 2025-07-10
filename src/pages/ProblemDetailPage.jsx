@@ -1,4 +1,3 @@
-// src/pages/ProblemDetailPage.jsx
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
@@ -37,10 +36,10 @@ const ProblemDetailPage = () => {
     if (saved) setCode(saved);
   }, [problemId, navigate]);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!problem) return;
 
-    const result = runTests(code, problem.testCases);
+    const result = await runTests(code, problem.testCases, problem); // ✅ await for async tests
     setTestResults(result);
 
     if (result.every(r => r.pass)) {
@@ -66,7 +65,7 @@ const ProblemDetailPage = () => {
 
         <p>{problem.description}</p>
 
-        {problem.examples && (
+        {problem.examples && problem.examples.length > 0 && (
           <>
             <h5>📘 Examples</h5>
             {problem.examples.map((ex, idx) => (
@@ -74,23 +73,23 @@ const ProblemDetailPage = () => {
             ))}
           </>
         )}
-{problem.pseudocode && (
-  <div className="mt-4">
-    <h5>🧠 Pseudocode</h5>
-    <pre className="mt-2 p-3 rounded text-start overflow-auto" style={{
-      backgroundColor: '#f4f4f4',
-      color: '#34495e',
-      fontFamily: 'monospace',
-      fontSize: '0.9rem',
-      border: '1px solid #ccc',
-      borderRadius: '10px',
-    }}>
-      <code>{problem.pseudocode.trim()}</code>
-    </pre>
-  </div>
-)}
 
-        {/* 🔍 Show Solution Block (moved up) */}
+        {problem.pseudocode && (
+          <div className="mt-4">
+            <h5>🧠 Pseudocode</h5>
+            <pre className="mt-2 p-3 rounded text-start overflow-auto" style={{
+              backgroundColor: '#f4f4f4',
+              color: '#34495e',
+              fontFamily: 'monospace',
+              fontSize: '0.9rem',
+              border: '1px solid #ccc',
+              borderRadius: '10px',
+            }}>
+              <code>{problem.pseudocode.trim()}</code>
+            </pre>
+          </div>
+        )}
+
         {problem.solution && (
           <div className="mt-4">
             <button
@@ -102,16 +101,15 @@ const ProblemDetailPage = () => {
 
             {showSolution && (
               <pre className="mt-3 p-3 rounded text-start overflow-auto" style={{
-  backgroundColor: '#fff8dc',
-  color: '#2c3e50',
-  fontFamily: 'monospace',
-  fontSize: '0.9rem',
-  border: '2px dashed #ffb347',
-  borderRadius: '12px',
-}}>
-  <code>{problem.solution.trim()}</code>
-</pre>
-
+                backgroundColor: '#fff8dc',
+                color: '#2c3e50',
+                fontFamily: 'monospace',
+                fontSize: '0.9rem',
+                border: '2px dashed #ffb347',
+                borderRadius: '12px',
+              }}>
+                <code>{problem.solution.trim()}</code>
+              </pre>
             )}
           </div>
         )}
