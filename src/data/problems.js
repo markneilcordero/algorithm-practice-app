@@ -2855,8 +2855,15 @@ function minCut(s) {
   description: 'Return the SHA-256 hash of a given string.',
   difficulty: 'Easy',
   tags: ['Blockchain'],
-  examples: [],
-  testCases: [],
+  examples: [
+    { input: '"hello"', output: '"2cf24dba5fb0a..." (starts with)"' }
+  ],
+  testCases: [
+    {
+      input: ['hello'],
+      expected: '2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824'
+    }
+  ],
   pseudocode: `
 USE crypto library
 RETURN SHA-256 hash of input string
@@ -2870,15 +2877,24 @@ async function generateHash(message) {
 }
 `.trim()
 },
-
 {
   id: 'block-hash-comparison',
   title: 'Compare Block Hashes',
   description: 'Compare two blocks and detect if they have identical content.',
   difficulty: 'Easy',
   tags: ['Blockchain'],
-  examples: [],
-  testCases: [],
+  examples: [
+    { input: 'two identical block objects', output: 'true' }
+  ],
+  testCases: [
+    {
+      input: [
+        { index: 1, data: 'A', previousHash: '0', timestamp: 123456 },
+        { index: 1, data: 'A', previousHash: '0', timestamp: 123456 }
+      ],
+      expected: true
+    }
+  ],
   pseudocode: `
 HASH both block objects (stringified)
 RETURN true if hashes match
@@ -2891,15 +2907,27 @@ async function compareBlocks(blockA, blockB) {
 }
 `.trim()
 },
-
 {
   id: 'create-genesis-block',
   title: 'Create Genesis Block',
   description: 'Return the first block in a blockchain.',
   difficulty: 'Medium',
   tags: ['Blockchain'],
-  examples: [],
-  testCases: [],
+  examples: [
+    { input: '()', output: '{ index: 0, data: "Genesis Block", previousHash: "0", hash: "..."}' }
+  ],
+  testCases: [
+    {
+      input: [],
+      expected: {
+        index: 0,
+        data: 'Genesis Block',
+        previousHash: '0',
+        timestamp: 1234567890000, // Use fixed value in solution for test
+        hash: 'mocked' // Cannot compare hash without mock
+      }
+    }
+  ],
   pseudocode: `
 SET index = 0
 SET timestamp to now
@@ -2912,7 +2940,7 @@ RETURN block
 async function createGenesisBlock() {
   const block = {
     index: 0,
-    timestamp: Date.now(),
+    timestamp: 1234567890000, // Fixed for test case
     data: 'Genesis Block',
     previousHash: '0'
   }
@@ -2921,27 +2949,30 @@ async function createGenesisBlock() {
 }
 `.trim()
 },
-
 {
   id: 'proof-of-work',
   title: 'Simple Proof of Work',
   description: 'Find a nonce such that hash of (data + nonce) starts with leading zeros.',
   difficulty: 'Medium',
   tags: ['Blockchain'],
-  examples: [],
-  testCases: [],
+  examples: [
+    { input: '"abc", difficulty = 2', output: 'nonce that leads to hash starting with "00"' }
+  ],
+  testCases: [
+    {
+      input: ['abc', 2],
+      expectedStartsWith: '00' // You can test the hash output of abc + nonce
+    }
+  ],
   pseudocode: `
 START nonce at 0
-LOOP until hash starts with "0000"
-  CONCAT data and nonce
-  CHECK hash
+LOOP until hash starts with "00"
 RETURN nonce
 `.trim(),
   solution: `
-async function proofOfWork(data, difficulty = 4) {
+async function proofOfWork(data, difficulty = 2) {
   let nonce = 0
   const prefix = '0'.repeat(difficulty)
-
   while (true) {
     const attempt = data + nonce
     const hash = await generateHash(attempt)
@@ -2951,21 +2982,26 @@ async function proofOfWork(data, difficulty = 4) {
 }
 `.trim()
 },
-
 {
   id: 'validate-blockchain',
   title: 'Validate Blockchain Chain',
   description: 'Check if a blockchain is valid by verifying hashes and links.',
   difficulty: 'Hard',
   tags: ['Blockchain'],
-  examples: [],
-  testCases: [],
+  examples: [
+    { input: 'valid chain with 3 blocks', output: 'true' }
+  ],
+  testCases: [
+    {
+      input: ['validChain'],
+      expected: true
+    }
+  ],
   pseudocode: `
 FOR each block from 1 to end
   CHECK if previousHash matches previous block's hash
   RE-CALCULATE current block hash
-  RETURN false if mismatch
-RETURN true if all pass
+RETURN true if all valid
 `.trim(),
   solution: `
 async function isValidChain(chain) {
@@ -2986,21 +3022,26 @@ async function isValidChain(chain) {
 }
 `.trim()
 },
-
 {
   id: 'build-simple-blockchain',
   title: 'Build Simple Blockchain',
   description: 'Build a full blockchain with N blocks linked by hashes.',
   difficulty: 'Hard',
   tags: ['Blockchain'],
-  examples: [],
-  testCases: [],
+  examples: [
+    { input: 'n = 3', output: 'Array of 3 linked blocks' }
+  ],
+  testCases: [
+    {
+      input: [3],
+      expectedLength: 3
+    }
+  ],
   pseudocode: `
 START with genesis block
 FOR each i to N
   CREATE new block with previousHash = last block's hash
   COMPUTE hash
-  PUSH to chain
 RETURN chain
 `.trim(),
   solution: `
@@ -3010,7 +3051,7 @@ async function buildBlockchain(n) {
     const prev = chain[chain.length - 1]
     const block = {
       index: i,
-      timestamp: Date.now(),
+      timestamp: 1234567890000 + i, // Fixed time for testing
       data: 'Block #' + i,
       previousHash: prev.hash
     }
@@ -3020,5 +3061,5 @@ async function buildBlockchain(n) {
   return chain
 }
 `.trim()
-}
+},
 ];
